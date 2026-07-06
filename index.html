@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>wenletsgo｜選物清單</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #1c1917; --muted: #78716c;
+    --accent: #ea580c; --accent-text: #ffffff; --border: #e7e5e4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #171412; --card: #221e1b; --text: #f5f0eb; --muted: #a8a29e;
+      --accent: #f97316; --accent-text: #1c1005; --border: #383430;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+    background: var(--bg); color: var(--text);
+    max-width: 480px; margin: 0 auto; padding: 28px 16px 40px;
+    line-height: 1.6;
+  }
+  header { text-align: center; margin-bottom: 24px; }
+  header h1 { font-size: 1.35rem; letter-spacing: .02em; }
+  header p { color: var(--muted); font-size: .9rem; margin-top: 4px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 18px 16px; margin-bottom: 14px;
+  }
+  .card h2 { font-size: 1.05rem; margin-bottom: 6px; }
+  .card .hook { font-size: .9rem; color: var(--muted); margin-bottom: 10px; }
+  .card .price { font-size: .85rem; color: var(--muted); margin-bottom: 12px; }
+  .card a.btn {
+    display: block; text-align: center; text-decoration: none;
+    background: var(--accent); color: var(--accent-text);
+    font-weight: 700; font-size: 1rem;
+    padding: 13px 0; border-radius: 12px;
+  }
+  .card a.btn:active { opacity: .85; }
+  footer { margin-top: 22px; text-align: center; }
+  footer .disclosure { font-size: .78rem; color: var(--muted); }
+  footer .updated { font-size: .72rem; color: var(--muted); margin-top: 8px; opacity: .8; }
+</style>
+</head>
+<body>
+<header>
+  <h1>wenletsgo 選物清單</h1>
+  <p>實測比較後整理，每款只講重點。</p>
+</header>
+
+<main id="cards"></main>
+
+<footer>
+  <p class="disclosure">※ 本頁含推廣連結，售價不變，完成購買我會獲得少許回饋，感謝支持。<br>價格與庫存以蝦皮商品頁為準。</p>
+  <p class="updated">更新：2026-07-06</p>
+</footer>
+
+<script>
+  var DATA = {"campaign": "c0002", "items": [{"name": "UV殺菌無線除蟎機", "hook": "洗床單只清到表面，讓你鼻子癢的是床墊深處的塵蟎。UV 紫外線＋強力吸塵連根吸出來，過敏族、家有寶寶毛孩最有感。", "price": 488, "links": {"ig": "https://s.shopee.tw/6ffIay9TNu"}}, {"name": "SUiTU 德國工藝 大吸力無線吸塵器(車家兩用)", "hook": "鍵盤縫、沙發隙、車內踏墊——隨手就能拿的無線手持，大吸塵器搆不到的地方一台搞定。附收納包，租屋族車主都好收。", "price": 799, "links": {"ig": "https://s.shopee.tw/6pyinkO8nC"}}, {"name": "Hoppi 嬰兒純水濕紙巾 80抽 箱購", "hook": "99% EDI 純水、加蓋不易乾。反正都要買的消耗品，箱購一次囤到位，車上、媽媽包、客廳各放一包。", "price": 529, "links": {"ig": "https://s.shopee.tw/4LHNowlMhS"}}]};
+  // ?src=ig|th|fb 決定用哪個平台的短連結（sub_id 已烙在短連結裡，供成效歸因）；缺該平台連結時回退 ig。
+  var src = new URLSearchParams(location.search).get("src") || "ig";
+  var main = document.getElementById("cards");
+  DATA.items.forEach(function (it) {
+    var url = it.links[src] || it.links["ig"];
+    if (!url) return;
+    var card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML =
+      "<h2></h2><p class='hook'></p><p class='price'></p>" +
+      "<a class='btn' rel='nofollow sponsored noopener' target='_blank'>到蝦皮看這款 →</a>";
+    card.querySelector("h2").textContent = it.name;
+    card.querySelector(".hook").textContent = it.hook;
+    card.querySelector(".price").textContent = "參考價 NT$" + it.price.toLocaleString() + "（以商品頁為準）";
+    card.querySelector("a").href = url;
+    main.appendChild(card);
+  });
+</script>
+</body>
+</html>
