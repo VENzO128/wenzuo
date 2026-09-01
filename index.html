@@ -126,9 +126,18 @@
     card.querySelector("a").href = url;
     return card;
   }
+  // 2026-09-01 修：舊寫法是 (it.group || "other") === g.id，而 || 只擋得住「空值」。
+  // group 寫成 GROUPS 裡沒有的字串（food / pet）時它是 truthy ⇒ 每一區都不match ⇒
+  // 卡片被靜靜丟掉，而且沒有任何檢查會失敗。舒肥雞胸(p0020)與筷子肉乾(p0021)
+  // 從 2026-07-21 上架起就從來沒出現在這頁上過。
+  var KNOWN_GROUPS = GROUPS.map(function (g) { return g.id; });
+  function groupOf(it) {
+    var g = it.group || "other";
+    return KNOWN_GROUPS.indexOf(g) >= 0 ? g : "other";
+  }
   GROUPS.forEach(function (g) {
     var inGroup = DATA.items.filter(function (it) {
-      return (it.group || "other") === g.id && pickUrl(it);
+      return groupOf(it) === g.id && pickUrl(it);
     });
     if (!inGroup.length) return;
     var sec = document.createElement("div");
